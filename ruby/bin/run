@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift(File.expand_path(File.join(__dir__, '..', 'lib')))
+
+module Main
+  module_function
+
+  def help
+    puts "Usage: #{$PROGRAM_NAME} <day> <1|2> [e]"
+    puts 'Runs the solution for a given part of the indicated day, using the example data if indicated.'
+  end
+
+  def main
+    help unless [2, 3].include? ARGV.length
+
+    day = ARGV.first.to_i
+    part = ARGV[1].to_i
+
+    help unless (1..12).include? day
+    help unless [1, 2].include? part
+    help if !ARGV[2].nil? && ARGV[2] != 'e'
+
+    require "day#{day}"
+    data = File.read(File.expand_path(File.join(__dir__, '..', '..', 'data', "day_#{day}#{ARGV[2]}")))
+               .lines
+               .map(&:strip)
+    puts Kernel.const_get(:"Day#{day}").send(:"part#{part}", data)
+  end
+end
+
+Main.main if __FILE__ == $PROGRAM_NAME
