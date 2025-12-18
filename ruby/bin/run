@@ -24,7 +24,7 @@ module Main
     require "day#{day}"
     data = File.read(File.expand_path(File.join(__dir__, '..', '..', 'data', "day_#{day}#{ARGV[2]}")))
                .lines
-               .map(&:strip)
+               .map { |line| line.delete("\n") }
     puts Kernel.const_get(:"Day#{day}").send(:"part#{part}", data)
   end
 end
